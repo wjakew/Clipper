@@ -22,10 +22,12 @@ class ClipBoardListener extends Observable implements Runnable {
     
     DefaultListModel source;
     JList<String> gui_source;
+    Data_Handler contener;
     
     ClipBoardListener(DefaultListModel to_add,JList<String> list_obj){
         source = to_add;
         gui_source = list_obj;
+        contener = new Data_Handler();
     }
 
     private volatile boolean running = true;
@@ -52,12 +54,15 @@ class ClipBoardListener extends Observable implements Runnable {
                     String data = (String) sysClip.getData(DataFlavor.stringFlavor);
                     if (!data.equals(recentContent)) {
                         recentContent = data;
-                        // Do whatever you want to do when a clipboard change was detected, e.g.:
-                        System.out.println(data);
                        
                         source.addElement(data);
-                        gui_source.setModel(source);
+                        // contener implementation
                         
+                        contener.add(data);
+                        contener.show();
+                        
+                        //gui_source.setModel(source);
+                        gui_source.setModel(contener.return_listmodel());
                         setChanged();
                         notifyObservers(data);
                     }
