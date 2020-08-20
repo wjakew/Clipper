@@ -5,10 +5,10 @@ all rights reserved
  */
 package clipper;
 
-import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import javax.swing.DefaultListModel;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
@@ -16,10 +16,11 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author jakubwawak
  */
 public class main_window extends javax.swing.JFrame {
-
+    final String version = "v1.0.0B2";
     
     DefaultListModel<String> clipboard_list_model;
     
+    int index = -1;
     ClipBoardListener clipboard_evt;
     
     /**
@@ -28,8 +29,11 @@ public class main_window extends javax.swing.JFrame {
     public main_window() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         super("Clipper");
 
+
         initComponents();
         prepare_list();
+        
+        version_label.setText(version);
         
         clipboard_evt = new ClipBoardListener(clipboard_list_model,clipper_jList);
         Thread thread = new Thread(clipboard_evt);
@@ -56,11 +60,11 @@ public class main_window extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         clipper_jList = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        copy_to_c_button = new javax.swing.JButton();
+        more_data_button = new javax.swing.JButton();
+        database_button = new javax.swing.JButton();
+        version_label = new javax.swing.JLabel();
+        info_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,15 +80,30 @@ public class main_window extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(clipper_jList);
 
-        jButton1.setText("Copy to clipboard");
+        copy_to_c_button.setText("Copy to clipboard");
+        copy_to_c_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copy_to_c_buttonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("More data");
+        more_data_button.setText("More data");
+        more_data_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                more_data_buttonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Database");
+        database_button.setText("Database");
 
-        jLabel1.setText("jLabel1");
+        version_label.setText("jLabel1");
 
-        jButton4.setText("?");
+        info_button.setText("?");
+        info_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                info_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -95,12 +114,12 @@ public class main_window extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(info_button, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(version_label))
+                    .addComponent(copy_to_c_button, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                    .addComponent(more_data_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(database_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -109,15 +128,15 @@ public class main_window extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(copy_to_c_button)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(more_data_button)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(database_button)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton4))
+                    .addComponent(version_label)
+                    .addComponent(info_button))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -125,17 +144,37 @@ public class main_window extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void clipper_jListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clipper_jListMouseClicked
+        copy_to_c_button.setText("Copy to clipboard");
         System.out.println("Sel val: "+clipper_jList.getSelectedValue());
-        System.out.println("Sel indx: "+Integer.toString(clipper_jList.getSelectedIndex()));
+        index = clipper_jList.getSelectedIndex();
+        System.out.println("Sel indx: "+Integer.toString(index));
     }//GEN-LAST:event_clipper_jListMouseClicked
+
+    private void more_data_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_more_data_buttonActionPerformed
+        if (index != -1){
+            new more_info_window(this,true,clipboard_evt.contener,index);
+            clipper_jList.setModel(clipboard_evt.contener.return_listmodel());
+        }
+    }//GEN-LAST:event_more_data_buttonActionPerformed
+
+    private void copy_to_c_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copy_to_c_buttonActionPerformed
+        StringSelection stringSelection = new StringSelection(clipboard_evt.contener.get(index).raw_data);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+        copy_to_c_button.setText("Copied");
+    }//GEN-LAST:event_copy_to_c_buttonActionPerformed
+
+    private void info_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_info_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_info_buttonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> clipper_jList;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton copy_to_c_button;
+    private javax.swing.JButton database_button;
+    private javax.swing.JButton info_button;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton more_data_button;
+    private javax.swing.JLabel version_label;
     // End of variables declaration//GEN-END:variables
 }

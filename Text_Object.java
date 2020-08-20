@@ -35,15 +35,21 @@ public class Text_Object {
     
     /**
      * Function for returning raw data from object
-     * @return 
+     * @return String
      */
     String raw_data_show(){
         return raw_data;
     }
-
+    /**
+     * Function for showing date
+     * @return 
+     */
+    String date_show(){
+        return act_date.toString();
+    }
     /**
      * Function for showing cut clipboard data
-     * @return 
+     * @return String
      */
     String simple_show(){
         
@@ -55,6 +61,23 @@ public class Text_Object {
         }
     }
     
+    /**
+     * Function for giving category
+     * @return 
+     */
+    String give_category(){
+        
+        if(raw_data.contains(("https"))){
+            return "internet link";
+        }
+        else if (raw_data.contains("@")){
+            return "e-mail address";
+        }
+        else if (raw_data.contains("()")){
+            return "computer code";
+        }
+        return "other";
+    }
     
 }
 
