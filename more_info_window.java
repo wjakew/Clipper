@@ -138,6 +138,10 @@ public class more_info_window extends javax.swing.JDialog {
         copy_to_c_button.setText("Copy to clipboard");
     }//GEN-LAST:event_data_textfieldMouseClicked
 
+    /**
+     * Event handler - button "save edits" pressed
+     * @param evt 
+     */
     private void save_edits_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_edits_buttonActionPerformed
         if(!data_textfield.getText().equals(data.raw_data)){
             if (data_contener.update(data_textfield.getText(), index)){
@@ -160,6 +164,10 @@ public class more_info_window extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_save_edits_buttonActionPerformed
 
+    /**
+     * Event handler - button "delete" pressed
+     * @param evt 
+     */
     private void delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_buttonActionPerformed
         data_contener.delete(index);
         data_textfield.setEditable(false);
@@ -169,6 +177,10 @@ public class more_info_window extends javax.swing.JDialog {
         copy_to_c_button.setVisible(false);
     }//GEN-LAST:event_delete_buttonActionPerformed
 
+    /**
+     * Event handler - button "copy to clipboard" pressed
+     * @param evt 
+     */
     private void copy_to_c_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copy_to_c_buttonActionPerformed
         StringSelection stringSelection = new StringSelection(data.raw_data);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

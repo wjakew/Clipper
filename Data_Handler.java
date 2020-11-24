@@ -10,7 +10,7 @@ import java.util.Date;
 import javax.swing.DefaultListModel;
 
 /**
- *
+ *Object for storing data
  * @author jakubwawak
  */
 public class Data_Handler {

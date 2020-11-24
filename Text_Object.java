@@ -8,7 +8,7 @@ package clipper;
 import java.util.Date;
 
 /**
- *
+ *Object for storing text
  * @author jakubwawak
  */
 public class Text_Object {
@@ -42,7 +42,7 @@ public class Text_Object {
     }
     /**
      * Function for showing date
-     * @return 
+     * @return String
      */
     String date_show(){
         return act_date.toString();
@@ -63,7 +63,7 @@ public class Text_Object {
     
     /**
      * Function for giving category
-     * @return 
+     * @return String
      */
     String give_category(){
         
